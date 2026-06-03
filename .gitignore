@@ -22,3 +22,20 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+# --- Bổ sung cho IDE (VS Code, IntelliJ, Eclipse) ---
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# --- Bổ sung cho các công cụ Build (Maven/Gradle) ---
+target/
+.gradle/
+build/
+
+# --- QUAN TRỌNG: Bảo mật & Biến môi trường ---
+.env
+.env.local
+*.properties
