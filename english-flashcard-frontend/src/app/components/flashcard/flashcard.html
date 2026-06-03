@@ -1,0 +1,150 @@
+<div class="study-page">
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+
+  <!-- Header -->
+  <header class="study-header glass-panel">
+    <button class="btn-back" (click)="goBack()">← Quay lại</button>
+    <div class="header-center">
+      <span class="category-label">{{ categoryName() }}</span>
+    </div>
+    <span class="counter">
+      @if (!isLoading()) { {{ currentIndex() + 1 }} / {{ flashcards().length }} }
+    </span>
+  </header>
+
+  <div class="study-content">
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="loading-spinner-large"></div>
+        <p>Đang tải từ vựng...</p>
+      </div>
+    }
+
+    @if (!isLoading() && flashcards().length === 0) {
+      <div class="empty-state">
+        <p>😕 Chủ đề này chưa có từ vựng nào</p>
+        <button class="btn-primary" (click)="goBack()">← Quay lại</button>
+      </div>
+    }
+
+    @if (!isLoading() && flashcards().length > 0 && current()) {
+      <!-- Progress bar -->
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" [style.width]="progress() + '%'"></div>
+      </div>
+
+      <!-- Flashcard 3D -->
+      <div class="card-scene" (click)="flip()">
+        <div class="card-3d" [class.flipped]="isFlipped()">
+          <!-- Front -->
+          <div class="card-face card-front glass-panel">
+            <div class="card-hint">Nhấn để xem nghĩa</div>
+            <div class="card-word">{{ current()!.word }}</div>
+            <div class="card-badge">EN</div>
+          </div>
+
+          <!-- Back -->
+          <div class="card-face card-back glass-panel">
+            <!-- Loading dictionary -->
+            @if (dictLoading()) {
+              <div class="dict-loading" (click)="$event.stopPropagation()">
+                <div class="loading-spinner-small"></div>
+                <span>Đang tra từ điển...</span>
+              </div>
+            }
+
+            <!-- Dictionary result -->
+            @if (!dictLoading() && dictData()) {
+              <div class="dict-content" (click)="$event.stopPropagation()">
+
+                <!-- Word + Phonetic + Audio -->
+                <div class="dict-header">
+                  <span class="dict-word">{{ dictData()!.word }}</span>
+                  @if (dictData()!.phonetic) {
+                    <span class="dict-phonetic">{{ dictData()!.phonetic }}</span>
+                  }
+                  @if (dictData()!.audio) {
+                    <button class="btn-audio" (click)="playAudio(); $event.stopPropagation()" title="Phát âm">
+                      🔊
+                    </button>
+                  }
+                </div>
+
+                <!-- Meanings -->
+                <div class="dict-meanings">
+                  @for (m of dictData()!.meanings; track m.partOfSpeech) {
+                    <div class="dict-meaning-block">
+                      <span class="dict-pos">{{ m.partOfSpeechVi }} <span class="dict-pos-en">({{ m.partOfSpeech }})</span></span>
+                      @for (def of m.definitions; track $index) {
+                        <p class="dict-def">{{ def.definitionVi }}</p>
+                        <p class="dict-def-en">{{ def.definition }}</p>
+                        @if (def.exampleVi) {
+                          <p class="dict-example">"{{ def.exampleVi }}"</p>
+                        }
+                      }
+                      @if (m.synonyms.length > 0) {
+                        <div class="dict-synonyms">
+                          <span class="syn-label">Từ đồng nghĩa:</span>
+                          @for (s of m.synonyms; track s) {
+                            <span class="syn-tag">{{ s }}</span>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+
+                <!-- Original meaning from DB -->
+                @if (current()!.meaning) {
+                  <div class="dict-original">
+                    <span class="orig-label">📝 Nghĩa của bạn:</span>
+                    {{ current()!.meaning }}
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Fallback: no dictionary result -->
+            @if (!dictLoading() && dictError()) {
+              <div class="dict-fallback">
+                <div class="card-hint">Nghĩa của từ</div>
+                <div class="card-meaning">{{ current()!.meaning ?? '📝 Chưa có nghĩa' }}</div>
+                @if (current()!.example) {
+                  <div class="card-example">
+                    <span class="ex-label">Ví dụ:</span> {{ current()!.example }}
+                  </div>
+                }
+                <p class="dict-not-found">⚠️ Không tìm thấy trong từ điển</p>
+              </div>
+            }
+
+            <!-- Initial state before flip -->
+            @if (!dictLoading() && !dictData() && !dictError()) {
+              <div class="dict-fallback">
+                <div class="card-hint">Nghĩa của từ</div>
+                <div class="card-meaning">{{ current()!.meaning ?? '📝 Chưa có nghĩa' }}</div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="study-controls">
+        <button class="btn-nav" (click)="prev()" [disabled]="currentIndex() === 0">
+          ← Từ trước
+        </button>
+        <button class="btn-flip-hint" (click)="flip()">
+          {{ isFlipped() ? '🙈 Ẩn nghĩa' : '👁 Xem nghĩa' }}
+        </button>
+        <button class="btn-nav" (click)="next()" [disabled]="currentIndex() === flashcards().length - 1">
+          Từ tiếp →
+        </button>
+      </div>
+
+      <!-- Progress text -->
+      <p class="progress-text">{{ progress() }}% hoàn thành</p>
+    }
+  </div>
+</div>

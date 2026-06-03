@@ -1,0 +1,69 @@
+<div class="dashboard-page">
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar glass-panel">
+    <div class="nav-brand">
+      <span>📚</span>
+      <span class="brand-name">FlashCard <span class="text-gradient">English</span></span>
+    </div>
+    <div class="nav-right">
+      <button class="btn-logout" (click)="logout()">🚪 Đăng xuất</button>
+    </div>
+  </nav>
+
+  <div class="dashboard-content">
+    <!-- Hero -->
+    <div class="hero-section">
+      <h1>Học từ vựng tiếng Anh với Flashcards</h1>
+      <p class="hero-sub">Nền tảng học từ vựng hiệu quả với hệ thống flashcard thông minh</p>
+
+      <!-- Search -->
+      <div class="search-box glass-panel">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Tìm kiếm bộ flashcard..." (input)="onSearch($event)" />
+      </div>
+    </div>
+
+    <!-- Loading -->
+    @if (isLoading()) {
+      <div class="loading-grid">
+        @for (i of [1,2,3,4,5,6,8,9,10,11,12]; track i) {
+          <div class="category-card skeleton"></div>
+        }
+      </div>
+    }
+
+    <!-- Grid -->
+    @if (!isLoading()) {
+      @if (filteredCategories.length === 0) {
+        <div class="empty-state">
+          <p>😕 Không tìm thấy chủ đề nào</p>
+        </div>
+      }
+      <div class="categories-grid">
+        @for (cat of filteredCategories; track cat.id; let i = $index) {
+          <div class="category-card glass-panel" (click)="goStudy(cat.id)"
+            [style.animation-delay]="(i * 0.04) + 's'"
+            [style.border-top-color]="getCardColor(i)">
+            
+            <div class="card-header">
+              <h3 class="card-title">{{ cat.name }}</h3>
+              <div class="card-icon" [style.background-color]="getCardColor(i)">
+                {{ getCategoryIcon(i) }}
+              </div>
+            </div>
+            
+            <div class="card-meta">
+              <span>50 từ</span>
+              <span class="dot">•</span>
+              <span>Cơ bản</span>
+            </div>
+            
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
