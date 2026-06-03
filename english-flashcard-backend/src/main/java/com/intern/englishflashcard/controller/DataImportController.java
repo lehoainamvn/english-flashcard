@@ -46,7 +46,7 @@ public class DataImportController {
             
             for (int i = 0; i < totalCategories; i++) {
                 Category category = new Category();
-                category.setName("Oxford 3000 - Part " + (i + 1));
+                category.setName("Bài " + (i + 1));
                 category = categoryRepository.save(category);
                 
                 int start = i * wordsPerCategory;

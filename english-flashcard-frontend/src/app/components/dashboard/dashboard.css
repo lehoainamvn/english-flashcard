@@ -1,0 +1,181 @@
+.dashboard-page {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.25;
+  pointer-events: none;
+}
+.orb-1 { width: 600px; height: 600px; background: #7c3aed; top: -200px; right: -100px; }
+.orb-2 { width: 500px; height: 500px; background: #2563eb; bottom: -100px; left: -100px; }
+
+/* Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  margin: 16px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 16px !important;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: 700; }
+.brand-name { font-size: 1.1rem; }
+.btn-logout {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.2);
+  color: #ef4444;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.btn-logout:hover { background: rgba(239,68,68,0.15); transform: translateY(-1px); }
+
+/* Content */
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+
+/* Hero */
+.hero-section { text-align: center; margin-bottom: 48px; }
+.hero-section h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+.hero-sub { color: var(--text-secondary); font-size: 1rem; margin-bottom: 32px; }
+
+/* Search */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  border-radius: 50px !important;
+}
+.search-icon { font-size: 1.2rem; }
+.search-box input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: 'Outfit', sans-serif;
+}
+.search-box input::placeholder { color: var(--text-secondary); }
+
+/* Grid */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* Card */
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  padding: 24px;
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+  animation: fadeInUp 0.4s both;
+  border-top: 4px solid transparent; /* Sẽ được ghi đè bởi inline style */
+}
+.category-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+.card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+.card-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+.progress-track {
+  width: 100%;
+  height: 6px;
+  background: #f1f5f9;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.3s ease;
+}
+.card-footer {
+  margin-top: 4px;
+}
+.time-estimate {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.skeleton {
+  height: 88px;
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+.loading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.empty-state { text-align: center; padding: 60px; color: var(--text-secondary); font-size: 1.1rem; }
