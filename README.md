@@ -78,15 +78,22 @@ Yêu cầu: Đã cài đặt **Node.js** và **Angular CLI**.
 
 ## 📸 Ảnh chụp màn hình (Screenshots)
 
+### Giao diện Đăng nhập / Đăng ký
+<p align="center">
+  <img src="screenshots/login-screen.png" alt="Login Screen" width="45%">
+  <img src="screenshots/register-screen.png" alt="Register Screen" width="45%">
+</p>
 
-- Giao diện Đăng nhập / Đăng ký
-![alt text](image.png)
-![alt text](image-1.png)
-- Màn hình Dashboard danh sách bài học
-![alt text](image-2.png)
-- Giao diện Lật thẻ 3D (Mặt trước / Mặt sau)
-![alt text](image-3.png)
-![alt text](image-4.png)
+### Màn hình Dashboard danh sách bài học
+<p align="center">
+  <img src="screenshots/dashboard-screen.png" alt="Dashboard" width="90%">
+</p>
+
+### Giao diện Lật thẻ 3D (Mặt trước / Mặt sau)
+<p align="center">
+  <img src="screenshots/flashcard-front.png" alt="Flashcard Front" width="45%">
+  <img src="screenshots/flashcard-back.png" alt="Flashcard Back" width="45%">
+</p>
 ---
 
 ## 📄 Giấy phép (License)
