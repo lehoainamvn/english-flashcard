@@ -1,0 +1,80 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>Quản lý Danh mục</h1>
+      <p>{{ categories.length }} danh mục bài học</p>
+    </div>
+    <button (click)="openCreate()" class="btn btn-primary">+ Thêm danh mục</button>
+  </div>
+
+  <div *ngIf="message" [class]="'toast toast-' + messageType">
+    {{ messageType === 'success' ? '✅' : '❌' }} {{ message }}
+  </div>
+
+  <div *ngIf="loading" class="table-container">
+    <div class="skeleton-row" *ngFor="let i of [1,2,3,4]"></div>
+  </div>
+
+  <div *ngIf="!loading" class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tên danh mục</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cat of categories">
+          <td class="td-id">#{{ cat.id }}</td>
+          <td>
+            <div class="cat-name">
+              <span class="cat-icon">📚</span>
+              <strong>{{ cat.name }}</strong>
+            </div>
+          </td>
+          <td class="actions">
+            <button (click)="openEdit(cat)" class="btn btn-sm btn-ghost">✏️ Sửa</button>
+            <button (click)="confirmDelete(cat)" class="btn btn-sm btn-danger">🗑 Xóa</button>
+          </td>
+        </tr>
+        <tr *ngIf="categories.length === 0">
+          <td colspan="3" class="empty">Chưa có danh mục nào.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Form Modal -->
+<div *ngIf="showForm" class="modal-overlay" (click)="cancelForm()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>{{ editingId ? '✏️ Sửa danh mục' : '➕ Thêm danh mục mới' }}</h3>
+    <div class="form-group">
+      <label>Tên danh mục</label>
+      <input [(ngModel)]="formName" type="text" placeholder="Nhập tên danh mục..." class="form-input"
+        (keyup.enter)="saveCategory()" autofocus />
+    </div>
+    <div class="modal-actions">
+      <button (click)="cancelForm()" class="btn btn-outline">Hủy</button>
+      <button (click)="saveCategory()" class="btn btn-primary" [disabled]="!formName.trim()">
+        {{ editingId ? 'Cập nhật' : 'Tạo mới' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Modal -->
+<div *ngIf="deleteTarget" class="modal-overlay" (click)="deleteTarget = null">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-icon">⚠️</div>
+    <h3>Xác nhận xóa</h3>
+    <p>Xóa danh mục <strong>{{ deleteTarget.name }}</strong>?<br>
+      <span class="warn-text">Toàn bộ từ vựng trong danh mục này cũng sẽ bị xóa!</span>
+    </p>
+    <div class="modal-actions">
+      <button (click)="deleteTarget = null" class="btn btn-outline">Hủy</button>
+      <button (click)="deleteCategory()" class="btn btn-danger">Xóa</button>
+    </div>
+  </div>
+</div>
