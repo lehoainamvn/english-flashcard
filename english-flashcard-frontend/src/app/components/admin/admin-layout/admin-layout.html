@@ -1,8 +1,7 @@
 <div class="admin-layout">
   <aside class="sidebar">
     <div class="sidebar-header">
-      <div class="logo-icon">⚡</div>
-      <div class="logo-text">
+      <div class="logo-block">
         <span class="logo-title">Admin Panel</span>
         <span class="logo-sub">English Flashcard</span>
       </div>
@@ -11,29 +10,20 @@
     <nav class="sidebar-nav">
       <div class="nav-section-label">TỔNG QUAN</div>
       <a routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
-        <span class="nav-icon">📊</span>
-        <span>Dashboard</span>
+        Dashboard
       </a>
 
       <div class="nav-section-label">QUẢN LÝ</div>
       <a routerLink="/admin/users" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon">👥</span>
-        <span>Người dùng</span>
-      </a>
-      <a routerLink="/admin/categories" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon">📚</span>
-        <span>Danh mục</span>
+        Người dùng
       </a>
       <a routerLink="/admin/words" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon">📝</span>
-        <span>Từ vựng</span>
+        Từ vựng
       </a>
     </nav>
 
     <div class="sidebar-footer">
-      <button (click)="logout()" class="btn-logout">
-        <span>🚪</span> Đăng xuất
-      </button>
+      <button (click)="logout()" class="btn-logout">Đăng xuất</button>
     </div>
   </aside>
 

@@ -1,45 +1,39 @@
 <div class="page">
   <div class="page-header">
     <div>
-      <h1>Quản lý Từ vựng</h1>
-      <p>{{ selectedCategory ? 'Đang xem: ' + selectedCategory.name + ' (' + flashcards.length + ' từ)' : 'Chọn một danh mục để bắt đầu' }}</p>
+      <h1>Từ vựng</h1>
+      <p>{{ selectedCategory ? selectedCategory.name + ' — ' + flashcards.length + ' từ' : 'Chọn danh mục để bắt đầu' }}</p>
     </div>
     <button *ngIf="selectedCategory" (click)="openCreate()" class="btn btn-primary">+ Thêm từ</button>
   </div>
 
-  <div *ngIf="message" [class]="'toast toast-' + messageType">
-    {{ messageType === 'success' ? '✅' : '❌' }} {{ message }}
-  </div>
+  <div *ngIf="message" [class]="'toast toast-' + messageType">{{ message }}</div>
 
-  <!-- Category chips -->
+  <!-- Category chips — chỉ nơi này giữ icon nhỏ -->
   <div class="category-bar">
     <button
-      *ngFor="let cat of categories"
+      *ngFor="let cat of categories; let i = index"
       [class.active]="selectedCategory?.id === cat.id"
       (click)="selectCategory(cat)"
       class="chip"
     >
+      <span class="chip-dot" [style.background]="chipColor(i)"></span>
       {{ cat.name }}
     </button>
   </div>
 
-  <!-- Search -->
   <div *ngIf="selectedCategory && !loading" class="search-bar">
-    <input [(ngModel)]="searchText" type="text" placeholder="🔍 Tìm từ vựng hoặc nghĩa..." class="search-input" />
+    <input [(ngModel)]="searchText" type="text" placeholder="Tìm từ vựng hoặc nghĩa..." class="search-input" />
   </div>
 
-  <!-- Empty state -->
   <div *ngIf="!selectedCategory" class="empty-state">
-    <div class="empty-icon">📚</div>
-    <div>Chọn một danh mục bên trên để xem và quản lý từ vựng</div>
+    Chọn một danh mục bên trên để xem và quản lý từ vựng
   </div>
 
-  <!-- Loading -->
   <div *ngIf="selectedCategory && loading" class="table-container">
     <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]"></div>
   </div>
 
-  <!-- Table -->
   <div *ngIf="selectedCategory && !loading" class="table-container">
     <div *ngIf="filteredFlashcards.length === 0" class="empty-state-sm">
       {{ searchText ? 'Không tìm thấy từ vựng phù hợp.' : 'Danh mục này chưa có từ vựng nào.' }}
@@ -49,20 +43,20 @@
         <tr>
           <th>ID</th>
           <th>Từ vựng</th>
-          <th>Nghĩa tiếng Việt</th>
+          <th>Nghĩa</th>
           <th>Câu ví dụ</th>
           <th>Thao tác</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let card of filteredFlashcards">
-          <td class="td-id">#{{ card.id }}</td>
-          <td><span class="word-chip">{{ card.word }}</span></td>
+          <td class="td-muted">#{{ card.id }}</td>
+          <td><span class="word-tag">{{ card.word }}</span></td>
           <td>{{ card.meaning || '—' }}</td>
           <td class="example-cell">{{ card.example || '—' }}</td>
           <td class="actions">
-            <button (click)="openEdit(card)" class="btn btn-sm btn-ghost">✏️ Sửa</button>
-            <button (click)="confirmDelete(card)" class="btn btn-sm btn-danger">🗑 Xóa</button>
+            <button (click)="openEdit(card)" class="btn btn-sm btn-ghost">Sửa</button>
+            <button (click)="confirmDelete(card)" class="btn btn-sm btn-danger">Xóa</button>
           </td>
         </tr>
       </tbody>
@@ -73,7 +67,7 @@
 <!-- Form Modal -->
 <div *ngIf="showForm" class="modal-overlay" (click)="cancelForm()">
   <div class="modal modal-wide" (click)="$event.stopPropagation()">
-    <h3>{{ editingId ? '✏️ Sửa từ vựng' : '➕ Thêm từ vựng mới' }}</h3>
+    <h3>{{ editingId ? 'Sửa từ vựng' : 'Thêm từ vựng mới' }}</h3>
     <p class="modal-sub">Danh mục: <strong>{{ selectedCategory?.name }}</strong></p>
     <div class="form-row">
       <div class="form-group">
@@ -82,7 +76,7 @@
       </div>
       <div class="form-group">
         <label>Nghĩa tiếng Việt</label>
-        <input [(ngModel)]="formMeaning" type="text" placeholder="e.g. Thoáng qua, ngắn ngủi" class="form-input" />
+        <input [(ngModel)]="formMeaning" type="text" placeholder="e.g. Thoáng qua" class="form-input" />
       </div>
     </div>
     <div class="form-group">
@@ -101,9 +95,8 @@
 <!-- Confirm Delete Modal -->
 <div *ngIf="deleteTarget" class="modal-overlay" (click)="deleteTarget = null">
   <div class="modal" (click)="$event.stopPropagation()">
-    <div class="modal-icon">🗑️</div>
     <h3>Xóa từ vựng</h3>
-    <p>Xóa từ <strong>"{{ deleteTarget.word }}"</strong>?<br>Hành động này không thể hoàn tác.</p>
+    <p>Xóa từ <strong>"{{ deleteTarget.word }}"</strong>? Hành động này không thể hoàn tác.</p>
     <div class="modal-actions">
       <button (click)="deleteTarget = null" class="btn btn-outline">Hủy</button>
       <button (click)="deleteFlashcard()" class="btn btn-danger">Xóa</button>
