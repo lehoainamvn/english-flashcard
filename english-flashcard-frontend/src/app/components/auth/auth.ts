@@ -25,7 +25,9 @@ export class AuthComponent {
   registerPassword = '';
 
   constructor(private auth: AuthService, private router: Router) {
-    if (this.auth.isLoggedIn()) this.router.navigate(['/dashboard']);
+    if (this.auth.isLoggedIn()) {
+      this.router.navigate([this.auth.isAdmin() ? '/admin' : '/dashboard']);
+    }
   }
 
   switchMode() {
@@ -44,7 +46,7 @@ export class AuthComponent {
     this.auth.login(this.loginEmail, this.loginPassword).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/dashboard']);
+        this.router.navigate([this.auth.isAdmin() ? '/admin' : '/dashboard']);
       },
       error: (err) => {
         this.isLoading.set(false);

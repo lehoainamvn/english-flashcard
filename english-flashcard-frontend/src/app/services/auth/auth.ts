@@ -5,12 +5,17 @@ import { Router } from '@angular/router';
 
 export interface AuthResponse {
   token: string;
+  id: number;
+  username: string;
+  email: string;
+  role: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly API = 'http://localhost:8080/auth';
   private tokenKey = 'auth_token';
+  private roleKey = 'auth_role';
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
 
   isLoggedIn$ = this.loggedIn.asObservable();
@@ -21,6 +26,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.API}/login`, { email, password }).pipe(
       tap(res => {
         localStorage.setItem(this.tokenKey, res.token);
+        localStorage.setItem(this.roleKey, res.role ?? 'USER');
         this.loggedIn.next(true);
       })
     );
@@ -32,12 +38,21 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.roleKey);
     this.loggedIn.next(false);
     this.router.navigate(['/auth']);
   }
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
+  }
+
+  getRole(): string {
+    return localStorage.getItem(this.roleKey) ?? 'USER';
+  }
+
+  isAdmin(): boolean {
+    return this.getRole() === 'ADMIN';
   }
 
   hasToken(): boolean {
