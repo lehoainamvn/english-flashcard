@@ -113,4 +113,9 @@ export class AdminWordsComponent implements OnInit {
     this.messageType = type;
     setTimeout(() => (this.message = ''), 3000);
   }
+
+  chipColor(i: number): string {
+    const colors = ['#7c3aed','#0891b2','#059669','#d97706','#dc2626','#6366f1','#0d9488'];
+    return colors[i % colors.length];
+  }
 }

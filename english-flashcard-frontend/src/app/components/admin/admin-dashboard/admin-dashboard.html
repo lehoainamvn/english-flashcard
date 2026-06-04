@@ -1,79 +1,29 @@
 <div class="dashboard">
-  <!-- Header -->
   <div class="page-header">
     <div>
       <h1>Dashboard</h1>
-      <p>Chào mừng trở lại, Admin 👋</p>
+      <p>Tổng quan hệ thống</p>
     </div>
-    <div class="header-date">📅 {{ today | date:'dd/MM/yyyy' }}</div>
+    <div class="header-date">{{ today | date:'dd/MM/yyyy' }}</div>
   </div>
 
-  <!-- Skeleton loading -->
   <div *ngIf="loading" class="stats-grid">
-    <div class="stat-card skeleton" *ngFor="let i of [1,2,3]"></div>
+    <div class="stat-card skeleton" *ngFor="let i of [1,2]"></div>
   </div>
 
-  <!-- Stats cards -->
   <div *ngIf="!loading" class="stats-grid">
     <div class="stat-card card-users">
-      <div class="card-body">
-        <div class="card-label">Tổng người dùng</div>
-        <div class="card-value">{{ stats.totalUsers }}</div>
-        <div class="card-footer-link">
-          <a routerLink="/admin/users">Xem chi tiết →</a>
-        </div>
-      </div>
-      <div class="card-icon-wrap users-icon">
-        <span>👥</span>
-      </div>
-    </div>
-
-    <div class="stat-card card-categories">
-      <div class="card-body">
-        <div class="card-label">Danh mục bài học</div>
-        <div class="card-value">{{ stats.totalCategories }}</div>
-        <div class="card-footer-link">
-          <a routerLink="/admin/categories">Xem chi tiết →</a>
-        </div>
-      </div>
-      <div class="card-icon-wrap categories-icon">
-        <span>📚</span>
-      </div>
+      <div class="card-label">Tổng người dùng</div>
+      <div class="card-value">{{ stats.totalUsers }}</div>
+      <a routerLink="/admin/users" class="card-link">Xem chi tiết</a>
     </div>
 
     <div class="stat-card card-words">
-      <div class="card-body">
-        <div class="card-label">Tổng từ vựng</div>
-        <div class="card-value">{{ stats.totalFlashcards }}</div>
-        <div class="card-footer-link">
-          <a routerLink="/admin/words">Xem chi tiết →</a>
-        </div>
-      </div>
-      <div class="card-icon-wrap words-icon">
-        <span>📝</span>
-      </div>
+      <div class="card-label">Tổng từ vựng</div>
+      <div class="card-value">{{ stats.totalFlashcards }}</div>
+      <a routerLink="/admin/words" class="card-link">Xem chi tiết</a>
     </div>
   </div>
 
-  <!-- Quick actions -->
-  <div *ngIf="!loading" class="section">
-    <h2 class="section-title">Thao tác nhanh</h2>
-    <div class="quick-actions">
-      <a routerLink="/admin/users" class="action-card">
-        <div class="action-icon" style="background:#ede9fe;">👥</div>
-        <div class="action-label">Quản lý Users</div>
-        <div class="action-desc">Xem, phân quyền, xóa người dùng</div>
-      </a>
-      <a routerLink="/admin/categories" class="action-card">
-        <div class="action-icon" style="background:#e0f2fe;">📚</div>
-        <div class="action-label">Quản lý Danh mục</div>
-        <div class="action-desc">Thêm, sửa, xóa danh mục bài học</div>
-      </a>
-      <a routerLink="/admin/words" class="action-card">
-        <div class="action-icon" style="background:#dcfce7;">📝</div>
-        <div class="action-label">Quản lý Từ vựng</div>
-        <div class="action-desc">CRUD flashcard theo từng danh mục</div>
-      </a>
-    </div>
-  </div>
+  
 </div>
