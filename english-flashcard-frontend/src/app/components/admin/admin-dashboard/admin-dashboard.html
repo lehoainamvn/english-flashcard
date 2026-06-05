@@ -18,6 +18,12 @@
       <a routerLink="/admin/users" class="card-link">Xem chi tiết</a>
     </div>
 
+    <div class="stat-card card-categories">
+      <div class="card-label">Tổng danh mục</div>
+      <div class="card-value">{{ stats.totalCategories }}</div>
+      <a routerLink="/admin/categories" class="card-link">Quản lý danh mục</a>
+    </div>
+
     <div class="stat-card card-words">
       <div class="card-label">Tổng từ vựng</div>
       <div class="card-value">{{ stats.totalFlashcards }}</div>

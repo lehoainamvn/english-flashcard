@@ -18,6 +18,18 @@ CREATE TABLE flashcards (
     example TEXT
 );
 
+CREATE TABLE study_history (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    category_id BIGINT NOT NULL,
+    learned_words INT DEFAULT 0,
+    total_words INT DEFAULT 0,
+    studied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_studied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (category_id) REFERENCES categories(id)
+);
+
 -- Tài khoản admin mặc định (password: admin123)
 INSERT INTO users (username, email, password, role, created_at)
 VALUES (
@@ -35,5 +47,10 @@ VALUES
 ('Travel'),
 ('Education'),
 ('Daily Life');
+
+-- Add last_studied_at column if not exists (PostgreSQL)
+ALTER TABLE study_history 
+ADD COLUMN IF NOT EXISTS last_studied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
 
 

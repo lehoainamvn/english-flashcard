@@ -17,6 +17,10 @@ export class FlashcardComponent implements OnInit {
   isFlipped = signal(false);
   isLoading = signal(true);
   categoryName = signal('');
+  categoryId = signal<number>(0);
+
+  // Learning tracking
+  learnedCount = signal(0);
 
   // Dictionary API state
   dictData = signal<DictResult | null>(null);
@@ -38,6 +42,7 @@ export class FlashcardComponent implements OnInit {
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('categoryId'));
+    this.categoryId.set(id);
     this.api.getFlashcards(id).subscribe({
       next: (data) => {
         this.flashcards.set(data);
@@ -82,6 +87,11 @@ export class FlashcardComponent implements OnInit {
     }
   }
 
+  markLearned() {
+    this.learnedCount.update(v => v + 1);
+    this.next();
+  }
+
   prev() {
     if (this.currentIndex() > 0) {
       this.isFlipped.set(false);
@@ -96,7 +106,35 @@ export class FlashcardComponent implements OnInit {
     if (url) new Audio(url).play();
   }
 
+  reload() {
+    this.currentIndex.set(0);
+    this.isFlipped.set(false);
+    this.dictData.set(null);
+    this.dictError.set(false);
+    this.learnedCount.set(0);
+  }
+
   goBack() {
-    this.router.navigate(['/dashboard']);
+    // Lưu lịch sử học tập
+    if (this.flashcards().length > 0) {
+      const request = {
+        categoryId: this.categoryId(),
+        learnedWords: this.learnedCount(),
+        totalWords: this.flashcards().length
+      };
+
+      this.api.saveStudyHistory(request).subscribe({
+        next: () => {
+          console.log('Study history saved');
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          console.error('Error saving study history:', err);
+          this.router.navigate(['/dashboard']);
+        }
+      });
+    } else {
+      this.router.navigate(['/dashboard']);
+    }
   }
 }
