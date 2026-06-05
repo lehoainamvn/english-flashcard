@@ -16,6 +16,7 @@ export class AuthService {
   private readonly API = 'http://localhost:8080/auth';
   private tokenKey = 'auth_token';
   private roleKey = 'auth_role';
+  private usernameKey = 'auth_username';
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
 
   isLoggedIn$ = this.loggedIn.asObservable();
@@ -27,6 +28,7 @@ export class AuthService {
       tap(res => {
         localStorage.setItem(this.tokenKey, res.token);
         localStorage.setItem(this.roleKey, res.role ?? 'USER');
+        localStorage.setItem(this.usernameKey, res.username);
         this.loggedIn.next(true);
       })
     );
@@ -39,12 +41,17 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.roleKey);
+    localStorage.removeItem(this.usernameKey);
     this.loggedIn.next(false);
     this.router.navigate(['/auth']);
   }
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
+  }
+
+  getUsername(): string {
+    return localStorage.getItem(this.usernameKey) ?? 'User';
   }
 
   getRole(): string {

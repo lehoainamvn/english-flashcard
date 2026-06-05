@@ -19,6 +19,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'profile',
+    loadComponent: () => import('./components/profile/profile').then(m => m.ProfileComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'admin',
     loadComponent: () =>
       import('./components/admin/admin-layout/admin-layout').then(m => m.AdminLayoutComponent),
@@ -38,7 +43,7 @@ export const routes: Routes = [
       {
         path: 'categories',
         loadComponent: () =>
-          import('./components/admin/admin-categories/admin-categories').then(m => m.AdminCategoriesComponent)
+          import('./components/admin/category-management/category-management').then(m => m.CategoryManagementComponent)
       },
       {
         path: 'words',

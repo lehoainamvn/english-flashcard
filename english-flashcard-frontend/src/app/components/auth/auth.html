@@ -1,78 +1,164 @@
 <div class="auth-page">
-  <!-- Background particles -->
-  <div class="bg-orb orb-1"></div>
-  <div class="bg-orb orb-2"></div>
-  <div class="bg-orb orb-3"></div>
 
-  <div class="auth-container">
-    <!-- Logo -->
-    <div class="logo">
-      <span class="logo-icon">📚</span>
-      <h1>FlashCard <span class="text-gradient">English</span></h1>
-      <p class="tagline">Học từ vựng thông minh, tiến bộ mỗi ngày</p>
-    </div>
+  <!-- Navbar -->
+  <app-navbar></app-navbar>
 
-    <!-- Card -->
-    <div class="auth-card glass-panel">
-      <!-- Tabs -->
+  <!-- Auth wrapper -->
+  <div class="auth-wrapper">
+
+    <!-- Tab -->
+    <div style="width: 100%; max-width: 480px;">
       <div class="tab-switcher">
-        <button [class.active]="isLogin()" (click)="isLogin() || switchMode()">Đăng Nhập</button>
-        <button [class.active]="!isLogin()" (click)="!isLogin() || switchMode()">Đăng Ký</button>
-        <div class="tab-indicator" [class.right]="!isLogin()"></div>
+        <button [class.active]="isLogin()" (click)="isLogin() || switchMode()">Đăng nhập</button>
+        <button [class.active]="!isLogin()" (click)="!isLogin() || switchMode()">Đăng ký</button>
       </div>
 
-      <!-- Alert messages -->
-      @if (errorMsg()) {
-        <div class="alert alert-error">⚠️ {{ errorMsg() }}</div>
-      }
-      @if (successMsg()) {
-        <div class="alert alert-success">✅ {{ successMsg() }}</div>
-      }
+      <!-- Card -->
+      <div class="card auth-card">
 
-      <!-- Login Form -->
-      @if (isLogin()) {
-        <form class="auth-form" (ngSubmit)="onLogin()">
-          <div class="form-group">
-            <label>Email</label>
-            <input class="input-field" type="email" [(ngModel)]="loginEmail" name="email"
-              placeholder="example@email.com" autocomplete="email" />
+        <!-- Title -->
+        @if (isLogin()) {
+          <div>
+            <h1 class="auth-title">Chào mừng trở lại!</h1>
+            <p class="auth-subtitle">Đăng nhập để tiếp tục hành trình học tập.</p>
           </div>
-          <div class="form-group">
-            <label>Mật khẩu</label>
-            <input class="input-field" type="password" [(ngModel)]="loginPassword" name="password"
-              placeholder="••••••••" autocomplete="current-password" />
+        } @else {
+          <div>
+            <h1 class="auth-title">Tạo tài khoản</h1>
+            <p class="auth-subtitle">Bắt đầu học từ vựng tiếng Anh hiệu quả ngay hôm nay.</p>
           </div>
-          <button class="btn-primary btn-full" type="submit" [disabled]="isLoading()">
-            @if (isLoading()) { <span class="spinner"></span> Đang đăng nhập... }
-            @else { 🚀 Đăng Nhập }
-          </button>
-        </form>
-      }
+        }
 
-      <!-- Register Form -->
-      @if (!isLogin()) {
-        <form class="auth-form" (ngSubmit)="onRegister()">
-          <div class="form-group">
-            <label>Tên người dùng</label>
-            <input class="input-field" type="text" [(ngModel)]="registerUsername" name="username"
-              placeholder="Nhập tên của bạn" />
+        <!-- Alerts -->
+        @if (errorMsg()) {
+          <div class="alert alert-error">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            {{ errorMsg() }}
           </div>
-          <div class="form-group">
-            <label>Email</label>
-            <input class="input-field" type="email" [(ngModel)]="registerEmail" name="email"
-              placeholder="example@email.com" autocomplete="email" />
+        }
+        @if (successMsg()) {
+          <div class="alert alert-success">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            {{ successMsg() }}
           </div>
-          <div class="form-group">
-            <label>Mật khẩu</label>
-            <input class="input-field" type="password" [(ngModel)]="registerPassword" name="password"
-              placeholder="Ít nhất 6 ký tự" autocomplete="new-password" />
-          </div>
-          <button class="btn-primary btn-full" type="submit" [disabled]="isLoading()">
-            @if (isLoading()) { <span class="spinner"></span> Đang đăng ký... }
-            @else { ✨ Tạo Tài Khoản }
-          </button>
-        </form>
-      }
+        }
+
+        <!-- Login Form -->
+        @if (isLogin()) {
+          <form (ngSubmit)="onLogin()" style="display:flex;flex-direction:column;gap:20px">
+            <div class="form-group">
+              <label class="form-label" for="login-email">Email</label>
+              <div class="input-wrap" [class.error]="emailError()">
+                <span class="input-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </span>
+                <input id="login-email" class="input-field" type="email"
+                  [(ngModel)]="loginEmail" name="email"
+                  placeholder="example@email.com" autocomplete="email"
+                  (blur)="validateEmail()" 
+                  [class.invalid]="emailError()" />
+              </div>
+              @if (emailError()) {
+                <span class="field-error">{{ emailError() }}</span>
+              }
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="login-password">Mật khẩu</label>
+              <div class="input-wrap" [class.error]="passwordError()">
+                <span class="input-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
+                <input id="login-password" class="input-field"
+                  [type]="showPassword ? 'text' : 'password'"
+                  [(ngModel)]="loginPassword" name="password"
+                  placeholder="Nhập mật khẩu" autocomplete="current-password"
+                  (blur)="validatePassword()"
+                  [class.invalid]="passwordError()" />
+                <button type="button" class="input-toggle" (click)="showPassword = !showPassword">
+                  @if (showPassword) {
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                  } @else {
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  }
+                </button>
+              </div>
+              @if (passwordError()) {
+                <span class="field-error">{{ passwordError() }}</span>
+              }
+            </div>
+            <div class="form-extras">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="rememberMe" name="remember" />
+                Ghi nhớ đăng nhập
+              </label>
+              <button type="button" class="link-btn">Quên mật khẩu?</button>
+            </div>
+            <button class="btn-submit" type="submit" [disabled]="isLoading() || !isFormValid()">
+              @if (isLoading()) { <span class="spinner"></span> Đang đăng nhập... }
+              @else { 
+                Đăng nhập
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="12,5 19,12 12,19"/>
+                </svg>
+              }
+            </button>
+          </form>
+        }
+
+        <!-- Register Form -->
+        @if (!isLogin()) {
+          <form (ngSubmit)="onRegister()" style="display:flex;flex-direction:column;gap:16px">
+            <div class="form-group">
+              <label class="form-label" for="reg-name">Họ và tên</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </span>
+                <input id="reg-name" class="input-field" type="text"
+                  [(ngModel)]="registerUsername" name="username"
+                  placeholder="Nhập họ và tên" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-email">Email</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </span>
+                <input id="reg-email" class="input-field" type="email"
+                  [(ngModel)]="registerEmail" name="email"
+                  placeholder="example@email.com" autocomplete="email" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-password">Mật khẩu</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
+                <input id="reg-password" class="input-field"
+                  [type]="showPassword ? 'text' : 'password'"
+                  [(ngModel)]="registerPassword" name="password"
+                  placeholder="Ít nhất 6 ký tự" autocomplete="new-password" />
+                <button type="button" class="input-toggle" (click)="showPassword = !showPassword">
+                  @if (showPassword) {
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                  } @else {
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  }
+                </button>
+              </div>
+            </div>
+            <button class="btn-primary btn-submit" type="submit" [disabled]="isLoading()">
+              @if (isLoading()) { <span class="spinner"></span> Đang đăng ký... }
+              @else { Tạo tài khoản → }
+            </button>
+          </form>
+        }
+
+      </div>
     </div>
+
   </div>
 </div>
